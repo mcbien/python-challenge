@@ -14,14 +14,11 @@ with open(filepath, "r") as csvfile:
 
     # Create empty coontents list to hold csv data
     contents = [] # used to capture full contents of csv file
-    months = [] # used to pature totals column of csv file
-    totals = [] # used to pature totals column of csv file
-
+    totals = []
 
     #Append csv data into contents by row
     for row in csvreader:
         contents.append(row)
-        months.append(row[0])
         totals.append(int(row[1]))
 
 # Determine the number of items in contents
@@ -30,6 +27,7 @@ count_csvrecords = len(contents)
 #Convert Profit / Loss column in contents to integer
 for row in contents:
     row[1] = int(row[1])
+
 
 # Determine the Profit / Loss column total
 profitloss = 0
@@ -45,23 +43,35 @@ for row in contents:
         greatestdecrease = row[1]
         greatestdecreasemonth = row[0]
 
-# for i in totals:
-#     profitloss = profitloss + i
-#     if i > greatestincrease:
-#         greatestincrease = i
-  
-#         greatestdecrease = i
+# create difference list to capture differcences in the totals list
+difference = []
+for i in range(len(totals)-1):
+    difference.append(totals[i+1]-totals[i])
+    #Note: List comprehension version: # differences = ([totals[i+1]-totals[i] for i in range(len(totals)-1)])
 
-
-# print(greatestincrease)
-
-# print(greatestdecrease)
-
+# Average = sum of difference / length of difference
+averagechange = round(sum(difference)/len(difference),2)
 
 # Output to terminal
 print("Financial Analysis")
 print("-"*30)
 print(f"Total Months: {count_csvrecords}")
 print(f"Total: ${profitloss}")
+print(f"Average Change: ${averagechange}")
 print(f"Greatest Increase in Profits: {greatestincreasemonth} (${greatestincrease})")
 print(f"Greatest Decrease in Profits: {greatestdecreasemonth} (${greatestdecrease})")
+
+# Write results to text file
+
+output_path = os.path.join("analysis","output.txt")
+
+with open(output_path,"w") as text:
+    text.write("Financial Analysis\n")
+    text.write("-"*30)
+    text.write("\n")
+    text.write(f"Total Months: {count_csvrecords}\n")
+    text.write(f"Total: ${profitloss}\n")
+    text.write(f"Average Change: ${averagechange}\n")
+    text.write(f"Greatest Increase in Profits: {greatestincreasemonth} (${greatestincrease})\n")
+    text.write(f"Greatest Decrease in Profits: {greatestdecreasemonth} (${greatestdecrease})\n")
+text.close()
