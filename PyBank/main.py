@@ -14,7 +14,7 @@ with open(filepath, "r") as csvfile:
 
     # Create empty coontents list to hold csv data
     contents = [] # used to capture full contents of csv file
-    totals = []
+    totals = [] # used to capture totals column of csv file
 
     #Append csv data into contents by row
     for row in csvreader:
